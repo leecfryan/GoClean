@@ -1,0 +1,58 @@
+services:
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+  api:
+    build: ./services/api
+    ports:
+      - "5000:5000"
+    environment:
+      MONGO_URI: mongodb://root:password@mongo:27017/goclean?authSource=admin
+      NODE_ENV: development
+    depends_on:
+      - mongo
+    volumes:
+      - ./services/api:/app       # hot reload in dev
+      - /app/node_modules
+
+  auth:
+    build: ./services/auth
+    ports:
+      - "5001:5001"
+    environment:
+      MONGO_URI: mongodb://root:password@mongo:27017/goclean_auth?authSource=admin
+      JWT_SECRET: your_jwt_secret
+    depends_on:
+      - mongo
+    volumes:
+      - ./services/auth:/app
+      - /app/node_modules
+
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      REACT_APP_API_URL: http://localhost/api
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - client
+      - api
+      - auth
+
+volumes:
+  mongo_data:
