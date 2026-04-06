@@ -1,5 +1,6 @@
 services:
   mongo:
+    container_name: GoClean-mongo
     image: mongo:7
     ports:
       - "27017:27017"
@@ -10,6 +11,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password
 
   api:
+    container_name: GoClean-api
     build: ./services/api
     ports:
       - "5000:5000"
@@ -23,6 +25,7 @@ services:
       - /app/node_modules
 
   auth:
+    container_name: GoClean-auth
     build: ./services/auth
     ports:
       - "5001:5001"
@@ -36,6 +39,7 @@ services:
       - /app/node_modules
 
   client:
+    container_name: GoClean-client
     build: ./client
     ports:
       - "3000:3000"
@@ -46,6 +50,7 @@ services:
       REACT_APP_API_URL: http://localhost/api
 
   nginx:
+    container_name: GoClean-nginx
     build: ./nginx
     ports:
       - "80:80"
