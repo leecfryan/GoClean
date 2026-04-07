@@ -17,13 +17,13 @@ const updateMe = async (req, res) => {
     if (req.body[field] !== undefined) updates[field] = req.body[field];
   });
 
-  const user = await User.findByIdAndUpdate(req.userId, updates, { new: true, runValidators: true });
+  const user = await User.update(req.userId, updates);
   if (!user) return res.status(404).json({ message: 'User not found' });
   res.json(user);
 };
 
 const deleteMe = async (req, res) => {
-  await User.findByIdAndDelete(req.userId);
+  await User.remove(req.userId);
   res.json({ message: 'Account deleted' });
 };
 
@@ -31,13 +31,9 @@ const deleteMe = async (req, res) => {
 const getAllUsers = async (req, res) => {
   const page = Math.max(1, parseInt(req.query.page) || 1);
   const limit = Math.min(100, parseInt(req.query.limit) || 20);
-  const skip = (page - 1) * limit;
+  const offset = (page - 1) * limit;
 
-  const [users, total] = await Promise.all([
-    User.find().skip(skip).limit(limit).sort({ createdAt: -1 }),
-    User.countDocuments(),
-  ]);
-
+  const { users, total } = await User.findAll({ limit, offset });
   res.json({ users, total, page, pages: Math.ceil(total / limit) });
 };
 

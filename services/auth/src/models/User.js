@@ -1,49 +1,45 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+const { pool } = require('../db');
+const bcrypt = require('bcryptjs');
 
-const userSchema = new mongoose.Schema(
-  {
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-      trim: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      minlength: 8,
-    },
-    age: { type: Number, required: true },
-    address: { type: String, required: true },
-    tier: {
-      type: String,
-      enum: ["normal", "silver", "gold", "platinum"],
-      default: "free",
-    },
-    createdAt: { type: Date, default: Date.now },
-    refreshTokens: [{ type: String }],
-  },
-  { timestamps: true },
-);
-
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-  this.password = await bcrypt.hash(this.password, 12);
-  next();
-});
-
-userSchema.methods.comparePassword = function (candidate) {
-  return bcrypt.compare(candidate, this.password);
+const findByEmail = async (email) => {
+  const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+  return rows[0] || null;
 };
 
-// Never send password or tokens over the wire
-userSchema.methods.toJSON = function () {
-  const obj = this.toObject();
-  delete obj.password;
-  delete obj.refreshTokens;
-  return obj;
+const findById = async (id) => {
+  const { rows } = await pool.query(
+    'SELECT id, email, age, address, role, tier, created_at FROM users WHERE id = $1',
+    [id]
+  );
+  return rows[0] || null;
 };
 
-module.exports = mongoose.model("User", userSchema);
+const create = async ({ email, password }) => {
+  const hashed = await bcrypt.hash(password, 12);
+  const { rows } = await pool.query(
+    'INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email, age, address, role, tier, created_at',
+    [email, hashed]
+  );
+  return rows[0];
+};
+
+const comparePassword = (candidate, hashed) => bcrypt.compare(candidate, hashed);
+
+const addRefreshToken = (userId, token) =>
+  pool.query('INSERT INTO refresh_tokens (user_id, token) VALUES ($1, $2)', [userId, token]);
+
+const removeRefreshToken = (token) =>
+  pool.query('DELETE FROM refresh_tokens WHERE token = $1', [token]);
+
+const hasRefreshToken = async (userId, token) => {
+  const { rows } = await pool.query(
+    'SELECT 1 FROM refresh_tokens WHERE user_id = $1 AND token = $2',
+    [userId, token]
+  );
+  return rows.length > 0;
+};
+
+const revokeAllTokens = (userId) =>
+  pool.query('DELETE FROM refresh_tokens WHERE user_id = $1', [userId]);
+
+module.exports = { findByEmail, findById, create, comparePassword, addRefreshToken, removeRefreshToken, hasRefreshToken, revokeAllTokens };

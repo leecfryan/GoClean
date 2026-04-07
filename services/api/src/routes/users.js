@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { body } = require('express-validator');
 const requireAuth = require('../middleware/requireAuth');
+const requireAdmin = require('../middleware/requireAdmin');
 const { getMe, updateMe, deleteMe, getAllUsers } = require('../controllers/userController');
 
 const router = Router();
@@ -14,6 +15,6 @@ router.patch('/me', [
 ], updateMe);
 router.delete('/me', deleteMe);
 
-router.get('/', getAllUsers);
+router.get('/', requireAdmin, getAllUsers);
 
 module.exports = router;

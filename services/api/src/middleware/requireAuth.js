@@ -15,6 +15,7 @@ const requireAuth = async (req, res, next) => {
       headers: { authorization: authHeader },
     });
     req.userId = data.userId;
+    req.role = data.role;
     next();
   } catch (err) {
     const status = err.response?.status || 401;
