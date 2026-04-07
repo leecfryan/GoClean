@@ -74,12 +74,11 @@ services:
   admin:
     container_name: GoClean-admin
     build: ./admin
-    ports:
-      - "3001:3001"
     volumes:
       - ./admin:/app
       - /app/node_modules
     environment:
+      PUBLIC_URL: /admin
       REACT_APP_API_URL: http://localhost/api
 
   nginx:
