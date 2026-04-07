@@ -60,13 +60,24 @@ services:
       - ./services/auth:/app
       - /app/node_modules
 
-  client:
-    container_name: GoClean-client
-    build: ./client
+  app:
+    container_name: GoClean-app
+    build: ./app
     ports:
       - "3000:3000"
     volumes:
-      - ./client:/app
+      - ./app:/app
+      - /app/node_modules
+    environment:
+      REACT_APP_API_URL: http://localhost/api
+
+  admin:
+    container_name: GoClean-admin
+    build: ./admin
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./admin:/app
       - /app/node_modules
     environment:
       REACT_APP_API_URL: http://localhost/api
@@ -77,7 +88,8 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - client
+      - app
+      - admin
       - api
       - auth
 
