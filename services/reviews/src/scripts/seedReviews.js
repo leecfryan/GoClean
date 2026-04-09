@@ -111,6 +111,7 @@ const REVIEW_TEMPLATES = {
       try {
         await reviewsCol.insertOne({
           company_id,
+          company_name: companyName,
           user_id,
           rating,
           title,
