@@ -60,16 +60,54 @@ services:
       - ./services/auth:/app
       - /app/node_modules
 
-  client:
-    container_name: GoClean-client
-    build: ./client
+  app:
+    container_name: GoClean-app
+    build: ./app
     ports:
       - "3000:3000"
     volumes:
-      - ./client:/app
+      - ./app:/app
       - /app/node_modules
     environment:
       REACT_APP_API_URL: http://localhost/api
+
+  admin:
+    container_name: GoClean-admin
+    build: ./admin
+    volumes:
+      - ./admin:/app
+      - /app/node_modules
+    environment:
+      PUBLIC_URL: /admin
+      REACT_APP_API_URL: http://localhost/api
+
+  companies:
+    container_name: GoClean-companies
+    build: ./services/companies
+    environment:
+      MONGO_URI: mongodb://root:password@mongo:27017/goclean?authSource=admin
+      AUTH_SERVICE_URL: http://auth:5001
+      NODE_ENV: development
+    depends_on:
+      - mongo
+      - auth
+    volumes:
+      - ./services/companies:/app
+      - /app/node_modules
+
+  reviews:
+    container_name: GoClean-reviews
+    build: ./services/reviews
+    environment:
+      MONGO_URI: mongodb://root:password@mongo:27017/goclean?authSource=admin
+      AUTH_SERVICE_URL: http://auth:5001
+      NODE_ENV: development
+    depends_on:
+      - mongo
+      - auth
+    volumes:
+      - ./services/reviews:/app
+      - /app/node_modules
 
   nginx:
     container_name: GoClean-nginx
@@ -77,9 +115,12 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - client
+      - app
+      - admin
       - api
       - auth
+      - companies
+      - reviews
 
 volumes:
   mongo_data:

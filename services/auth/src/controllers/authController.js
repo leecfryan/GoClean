@@ -14,12 +14,12 @@ const register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-  const { email, password } = req.body;
+  const { email, password, age, address } = req.body;
 
   const existing = await User.findByEmail(email);
   if (existing) return res.status(409).json({ message: 'Email already in use' });
 
-  const user = await User.create({ email, password });
+  const user = await User.create({ email, password, age, address });
   const accessToken = signAccessToken(user.id, user.role);
   const refreshToken = signRefreshToken(user.id);
 
