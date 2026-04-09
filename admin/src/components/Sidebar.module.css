@@ -1,0 +1,104 @@
+.sidebar {
+  width: 230px;
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.brand {
+  padding: 28px 20px 20px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.logo {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+.logo span { color: #2dd4bf; }
+
+.badge {
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #475569;
+  margin-top: 5px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  padding: 14px 10px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  width: 100%;
+}
+
+.navItem:hover {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+.navItem.active {
+  background: #134e4a;
+  color: #2dd4bf;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.navItem.active .icon {
+  opacity: 1;
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 10px 20px;
+  padding: 10px 12px;
+  background: none;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  width: calc(100% - 20px);
+}
+
+.logout:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}

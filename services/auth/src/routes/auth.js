@@ -9,7 +9,13 @@ const emailAndPassword = [
   body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
 ];
 
-router.post('/register', emailAndPassword, register);
+const registerRules = [
+  ...emailAndPassword,
+  body('age').isInt({ min: 18, max: 120 }).withMessage('Age must be between 18 and 120'),
+  body('address').isString().trim().notEmpty().withMessage('Address is required'),
+];
+
+router.post('/register', registerRules, register);
 router.post('/login', emailAndPassword, login);
 router.post('/refresh', refresh);
 router.post('/logout', logout);

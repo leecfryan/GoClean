@@ -14,11 +14,11 @@ const findById = async (id) => {
   return rows[0] || null;
 };
 
-const create = async ({ email, password }) => {
+const create = async ({ email, password, age, address }) => {
   const hashed = await bcrypt.hash(password, 12);
   const { rows } = await pool.query(
-    'INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email, age, address, role, tier, created_at',
-    [email, hashed]
+    'INSERT INTO users (email, password, age, address) VALUES ($1, $2, $3, $4) RETURNING id, email, age, address, role, tier, created_at',
+    [email, hashed, age || null, address || null]
   );
   return rows[0];
 };

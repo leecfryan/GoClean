@@ -1,0 +1,145 @@
+.page {
+  min-height: 100vh;
+}
+
+/* ── Hero: fixed-size container, panels slide inside it ── */
+.hero {
+  position: relative;
+  display: flex;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Illustrated panel slides left/right */
+.illustrationPanel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: linear-gradient(145deg, #0d9488 0%, #0f766e 60%, #115e59 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+  overflow: hidden;
+  transition: left 0.55s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 2;
+}
+
+/* Login: illustration on the RIGHT */
+.loginLayout .illustrationPanel {
+  left: 50%;
+}
+
+/* Signup: illustration on the LEFT */
+.signupLayout .illustrationPanel {
+  left: 0%;
+}
+
+/* Decorative blobs */
+.illustrationPanel::before,
+.illustrationPanel::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.12;
+  background: #fff;
+}
+
+.illustrationPanel::before {
+  width: 400px;
+  height: 400px;
+  top: -120px;
+  right: -120px;
+}
+
+.illustrationPanel::after {
+  width: 280px;
+  height: 280px;
+  bottom: -80px;
+  left: -80px;
+}
+
+.illustrationInner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  max-width: 440px;
+  text-align: center;
+}
+
+.illustrationArt {
+  width: 100%;
+}
+
+.illustrationCopy {
+  color: #fff;
+}
+
+.heroHeading {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 800;
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+
+.heroSub {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  line-height: 1.6;
+}
+
+/* Form panels — one on each side, always present */
+.formPanel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+  background: var(--surface);
+  min-height: 100vh;
+}
+
+/* Fade form content in when its panel is "active" (not obscured by illustration) */
+.formContent {
+  transition: opacity 0.3s ease 0.15s, transform 0.3s ease 0.15s;
+}
+
+.formContent.hidden {
+  opacity: 0;
+  transform: translateX(20px);
+  pointer-events: none;
+}
+
+.formContent.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── Mobile: stack vertically ── */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .illustrationPanel {
+    position: relative;
+    width: 100%;
+    left: 0 !important;
+    min-height: 320px;
+    padding: 40px 24px;
+  }
+
+  .formPanel {
+    min-height: unset;
+    padding: 40px 24px;
+  }
+
+  .formContent.hidden {
+    display: none;
+  }
+}
