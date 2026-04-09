@@ -81,6 +81,34 @@ services:
       PUBLIC_URL: /admin
       REACT_APP_API_URL: http://localhost/api
 
+  companies:
+    container_name: GoClean-companies
+    build: ./services/companies
+    environment:
+      MONGO_URI: mongodb://root:password@mongo:27017/goclean?authSource=admin
+      AUTH_SERVICE_URL: http://auth:5001
+      NODE_ENV: development
+    depends_on:
+      - mongo
+      - auth
+    volumes:
+      - ./services/companies:/app
+      - /app/node_modules
+
+  reviews:
+    container_name: GoClean-reviews
+    build: ./services/reviews
+    environment:
+      MONGO_URI: mongodb://root:password@mongo:27017/goclean?authSource=admin
+      AUTH_SERVICE_URL: http://auth:5001
+      NODE_ENV: development
+    depends_on:
+      - mongo
+      - auth
+    volumes:
+      - ./services/reviews:/app
+      - /app/node_modules
+
   nginx:
     container_name: GoClean-nginx
     build: ./nginx
@@ -91,6 +119,8 @@ services:
       - admin
       - api
       - auth
+      - companies
+      - reviews
 
 volumes:
   mongo_data:
