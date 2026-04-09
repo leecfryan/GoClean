@@ -35,17 +35,62 @@ jobs:
       - run: npm ci
       - run: npm test
 
-  test-client:
+  test-app:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: client
+        working-directory: app
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: client/package-lock.json
+          cache-dependency-path: app/package-lock.json
       - run: npm ci
       - run: npm test -- --watchAll=false
+
+  build-admin:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: admin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: admin/package-lock.json
+      - run: npm ci
+      - run: npm run build
+        env:
+          PUBLIC_URL: /admin
+
+  build-companies:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/companies
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: services/companies/package-lock.json
+      - run: npm ci
+
+  build-reviews:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/reviews
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: services/reviews/package-lock.json
+      - run: npm ci
