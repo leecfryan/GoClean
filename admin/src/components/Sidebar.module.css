@@ -1,23 +1,33 @@
+/* ══════════════════════════════════════════
+   SIDEBAR — base (desktop full)
+══════════════════════════════════════════ */
+
 .sidebar {
   width: 230px;
   background: #0f172a;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  min-height: 100vh;
+  height: 100vh;
   position: sticky;
   top: 0;
-  height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.22s ease;
+  z-index: 200;
 }
 
+/* ── Brand ── */
 .brand {
-  padding: 28px 20px 20px;
+  padding: 26px 20px 18px;
   border-bottom: 1px solid #1e293b;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: padding 0.22s;
 }
 
 .logo {
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   font-weight: 800;
   color: #fff;
   letter-spacing: -0.5px;
@@ -32,14 +42,17 @@
   text-transform: uppercase;
   color: #475569;
   margin-top: 5px;
+  transition: opacity 0.15s;
 }
 
+/* ── Nav ── */
 .nav {
   display: flex;
   flex-direction: column;
   gap: 2px;
   flex: 1;
   padding: 14px 10px;
+  overflow: hidden;
 }
 
 .navItem {
@@ -55,8 +68,9 @@
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, padding 0.22s, justify-content 0.22s;
   width: 100%;
+  white-space: nowrap;
 }
 
 .navItem:hover {
@@ -76,17 +90,51 @@
   opacity: 0.7;
 }
 
-.navItem.active .icon {
-  opacity: 1;
+.navItem.active .icon { opacity: 1; }
+
+.label {
+  overflow: hidden;
+  transition: opacity 0.15s, width 0.22s;
+  white-space: nowrap;
+}
+
+/* ── Footer ── */
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 10px 20px;
+  border-top: 1px solid #1e293b;
+  overflow: hidden;
+}
+
+.collapseBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  color: #475569;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, padding 0.22s;
+}
+
+.collapseBtn:hover {
+  background: #1e293b;
+  color: #94a3b8;
 }
 
 .logout {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin: 0 10px 20px;
-  padding: 10px 12px;
+  gap: 10px;
+  padding: 9px 12px;
   background: none;
   border: 1px solid #1e293b;
   border-radius: 8px;
@@ -94,11 +142,170 @@
   font-size: 0.82rem;
   font-weight: 500;
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
-  width: calc(100% - 20px);
+  width: 100%;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s, padding 0.22s;
 }
 
 .logout:hover {
   border-color: #ef4444;
   color: #ef4444;
+}
+
+/* ── Mobile close button (hidden on desktop) ── */
+.mobileClose {
+  display: none;
+}
+
+/* ══════════════════════════════════════════
+   COLLAPSED state (desktop icon-only)
+══════════════════════════════════════════ */
+
+.collapsed {
+  width: 64px;
+}
+
+.collapsed .brand {
+  padding: 26px 0 18px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Hide text in brand when collapsed */
+.collapsed .logo span,
+.collapsed .badge {
+  display: none;
+}
+
+/* Show only "G" as a compact mark */
+.collapsed .logo {
+  font-size: 1.1rem;
+}
+
+.collapsed .nav {
+  padding: 14px 6px;
+}
+
+.collapsed .navItem {
+  justify-content: center;
+  padding: 10px;
+  gap: 0;
+}
+
+.collapsed .navItem .label {
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.collapsed .footer {
+  padding: 10px 6px 20px;
+  align-items: center;
+}
+
+.collapsed .collapseBtn {
+  justify-content: center;
+  padding: 9px;
+  gap: 0;
+  width: auto;
+}
+
+.collapsed .collapseBtn .label {
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.collapsed .logout {
+  justify-content: center;
+  padding: 9px;
+  gap: 0;
+  width: auto;
+}
+
+.collapsed .logout .label {
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.collapsed .icon { opacity: 0.8; }
+.collapsed .navItem.active .icon { opacity: 1; }
+
+/* ══════════════════════════════════════════
+   MOBILE (≤ 768px)
+══════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100vh;
+    width: 260px;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    /* override collapse width on mobile — always full */
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+  }
+
+  /* When mobile open */
+  .mobileOpen {
+    transform: translateX(0);
+  }
+
+  /* Reset any collapsed styles on mobile */
+  .collapsed {
+    width: 260px;
+    transform: translateX(-100%);
+  }
+
+  .collapsed.mobileOpen {
+    transform: translateX(0);
+  }
+
+  .collapsed .brand { padding: 26px 20px 18px; display: block; }
+  .collapsed .logo { font-size: 1.3rem; }
+  .collapsed .logo span { display: inline; }
+  .collapsed .badge { display: block; }
+  .collapsed .nav { padding: 14px 10px; }
+  .collapsed .navItem { justify-content: flex-start; padding: 10px 12px; gap: 10px; }
+  .collapsed .navItem .label { width: auto; opacity: 1; }
+  .collapsed .footer { padding: 10px 10px 20px; align-items: stretch; }
+  .collapsed .collapseBtn { justify-content: flex-start; padding: 9px 12px; gap: 10px; width: 100%; }
+  .collapsed .collapseBtn .label { width: auto; opacity: 1; }
+  .collapsed .logout { justify-content: flex-start; padding: 9px 12px; gap: 10px; width: 100%; }
+  .collapsed .logout .label { width: auto; opacity: 1; }
+
+  /* Hide collapse toggle on mobile — not needed */
+  .collapseBtn { display: none; }
+
+  /* Show mobile close button */
+  .mobileClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: #1e293b;
+    border: none;
+    border-radius: 6px;
+    color: #94a3b8;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .mobileClose:hover {
+    background: #334155;
+    color: #e2e8f0;
+  }
+
+  /* Bump brand right to avoid close button overlap */
+  .brand {
+    padding-right: 48px;
+  }
 }

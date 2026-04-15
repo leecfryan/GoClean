@@ -3,8 +3,109 @@
   min-height: 100vh;
 }
 
+/* ── Main content ── */
 .main {
   flex: 1;
   min-width: 0;
   overflow-x: auto;
+  transition: none; /* desktop: layout shift handled by sidebar width */
+}
+
+/* ── Mobile top bar (hidden on desktop) ── */
+.topBar {
+  display: none;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #94a3b8;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+
+.hamburger:hover span { background: #e2e8f0; }
+
+.topBarBrand {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+  font-style: normal;
+}
+
+.topBarBrand em {
+  color: #2dd4bf;
+  font-style: normal;
+}
+
+.topBarLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #475569;
+  margin-left: 2px;
+}
+
+/* ── Mobile backdrop ── */
+.backdrop {
+  display: none;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  /* Show top bar */
+  .topBar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #0f172a;
+    padding: 0 16px;
+    height: 54px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid #1e293b;
+    flex-shrink: 0;
+  }
+
+  /* Show backdrop */
+  .backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 199;
+    backdrop-filter: blur(2px);
+  }
+
+  .main {
+    width: 100%;
+  }
+
+  /* Desktop-only collapse class has no effect on mobile */
+  .mainCollapsed {
+    margin-left: 0;
+  }
 }

@@ -442,6 +442,12 @@
 }
 
 @media (max-width: 900px) {
-  .mainGrid { grid-template-columns: 1fr; }
-  .page     { padding: 24px 16px; }
+  .mainGrid    { grid-template-columns: 1fr; }
+  .page        { padding: 24px 16px; }
+  .header      { flex-direction: column; }
+  .actionCards { flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .kpiGrid { grid-template-columns: 1fr 1fr; }
 }
